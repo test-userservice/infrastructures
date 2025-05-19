@@ -1,45 +1,42 @@
-# BLOG_MICROSERVICE
+# user_MICROSERVICE
 apiVersion: v1
 kind: Service
 metadata:
-  name: blog-microservice-svc
+  name: user-microservice-svc
 spec:
   selector:
-    app: blog-microservice
+    app: user-microservice
   type: ClusterIP
   ports:
     - protocol: TCP
-      port: 8082
-      targetPort: 8082
+      port: 8081
+      targetPort: 8081
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blog-microservice-deployment
+  name: user-microservice-deployment
   labels:
-    app: blog-microservice
+    app: user-microservice
 spec:
   selector:
     matchLabels:
-      app: blog-microservice
+      app: user-microservice
   template:
     metadata:
       labels:
-        app: blog-microservice
+        app: user-microservice
     spec:
       containers:
-      - name: blog-microservice-c
-        image: datnguyen10102004/blog-service:test-latest
+      - name: user-microservice-c
+        image: datnguyen10102004/user-service:test-latest
         env:
           - name: PORT
             value: "8082"
-          - name: MONGO_URI
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: blogdb_uri
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://mysql:3306/userdb?useSSL=false&serverTimezone=UTC
         resources:
           limits:
             memory: 128Mi
